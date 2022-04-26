@@ -12,7 +12,6 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
   for (const token of sanityTokens) {
     tokenToUSD[token.contractAddress] = Number(token.usdPrice);
   }
-  console.log(tokenToUSD)
 
   const calculateTotalBalance = async () => {
     let total = 0;

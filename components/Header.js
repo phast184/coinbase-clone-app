@@ -13,19 +13,19 @@ const Header = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
 
   const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: '#0a0b0d',
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "#0a0b0d",
       padding: 0,
-      border: 'none',
+      border: "none",
     },
     overlay: {
-      backgroundColor: 'rgba(10, 11, 13, 0.75)',
+      backgroundColor: "rgba(10, 11, 13, 0.75)",
     },
-  }
+  };
 
   return (
     <Wrapper>
@@ -40,16 +40,20 @@ const Header = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
         <Button style={{ backgroundColor: "#3773f5", color: "#000" }}>
           Buy / Sell
         </Button>
-        <Link href={"/?transfer=1"} >
+        <Link href={"/?transfer=1"}>
           <Button>Send / Receive</Button>
         </Link>
       </ButtonsContainer>
       <Modal
         isOpen={!!router.query.transfer}
         onRequestClose={() => router.push("/")}
-        style = {customStyles}
+        style={customStyles}
       >
-        <TransferModal />
+        <TransferModal
+          sanityTokens={sanityTokens}
+          thirdWebTokens={thirdWebTokens}
+          walletAddress={walletAddress}
+        />
       </Modal>
     </Wrapper>
   );

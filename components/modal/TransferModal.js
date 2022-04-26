@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
-const TransferModal = () => {
+import Transfer from "./Transfer";
+const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
   const [action, setAction] = useState("send");
+  const [selectedToken, setSelectedToken] = useState(sanityTokens[0]);
 
   const selectedStyle = {
     color: "#3773f5",
@@ -10,6 +11,20 @@ const TransferModal = () => {
 
   const unselectedStyle = {
     border: "1px solid #282b2f",
+  };
+
+  const renderLogic = () => {
+    if (action === "send") {
+      return (
+        <Transfer
+          selectedToken={selectedToken}
+          sanityTokens = {sanityTokens}
+          setAction={setAction}
+          walletAddress={walletAddress}
+          thirdWebTokens={thirdWebTokens}
+        />
+      );
+    }
   };
 
   return (
@@ -28,6 +43,7 @@ const TransferModal = () => {
           <p>Receive</p>
         </Option>
       </Selector>
+      <ModalMain>{renderLogic()}</ModalMain>
     </Wrapper>
   );
 };
@@ -58,6 +74,11 @@ const Option = styled.div`
     cursor: pointer;
     background-color: #111214;
   }
+`;
+
+const ModalMain = styled.div`
+  padding: 1rem;
+  flex: 1;
 `;
 
 export default TransferModal;
