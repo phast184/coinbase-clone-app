@@ -17,21 +17,39 @@ const Transfer = ({
   const [tokenBalance, setTokenBalance] = useState(0);
 
   useEffect(() => {
-      const activeToken =  thirdWebTokens.find(token => token.address === selectedToken.contractAddress);
-      setActiveThirdWebToken(activeToken);
-      const getBalanceActiveToken = async () => {
-          const balance = await activeToken.balanceOf(walletAddress);
-           setTokenBalance(balance.displayValue)
-      }
-      getBalanceActiveToken();
-  },[thirdWebTokens, selectedToken])
-
+    const activeToken = thirdWebTokens.find(
+      (token) => token.address === selectedToken.contractAddress
+    );
+    setActiveThirdWebToken(activeToken);
+    const getBalanceActiveToken = async () => {
+      const balance = await activeToken.balanceOf(walletAddress);
+      setTokenBalance(balance.displayValue);
+    };
+    getBalanceActiveToken();
+  }, [thirdWebTokens, selectedToken, activeThirdWebToken]);
 
   // build logo url every time component render or there is a change in selectedToken
   useEffect(() => {
     const url = imageUrlBuilder(client).image(selectedToken.logo).url();
     setImageUrl(url);
   }, [selectedToken]);
+
+  const sendCrypto = async () => {
+    if (activeThirdWebToken && amount && recipient) {
+      setAction("transferring");
+      const transaction = await activeThirdWebToken
+        .transfer(recipient, amount.toString().concat("000000000000000000"))
+        .then((res) => {
+          setAction("transferred");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else {
+      console.error("missing data");
+    }
+  };
   return (
     <Wrapper>
       <Amount>
@@ -61,20 +79,22 @@ const Transfer = ({
         </Row>
         <Row>
           <FieldName>Pay with</FieldName>
-          <CoinSelectList>
+          <CoinSelectList onClick={() => setAction('select')}>
             <Icon>
               <img src={imageUrl} />
             </Icon>
-            <CoinName>{selectedToken.symbol}</CoinName>
+            <CoinName>{selectedToken.name}</CoinName>
           </CoinSelectList>
         </Row>
       </TransferForm>
       <Row>
-        <Continue>Continue</Continue>
+        <Continue onClick={() => sendCrypto()}>Continue</Continue>
       </Row>
       <Row>
         <BalanceTitle>{selectedToken.symbol} Balance: </BalanceTitle>
-        <Balance>{tokenBalance} {selectedToken.symbol}</Balance>
+        <Balance>
+          {tokenBalance} {selectedToken.symbol}
+        </Balance>
       </Row>
     </Wrapper>
   );

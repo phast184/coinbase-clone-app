@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Transfer from "./Transfer";
+import CoinSelector from "./CoinSelector";
+import Loader from "./Loader";
+import Receive from "./Receive";
+
 const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
   const [action, setAction] = useState("send");
   const [selectedToken, setSelectedToken] = useState(sanityTokens[0]);
@@ -13,17 +17,71 @@ const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
     border: "1px solid #282b2f",
   };
 
-  const renderLogic = () => {
-    if (action === "send") {
-      return (
-        <Transfer
-          selectedToken={selectedToken}
-          sanityTokens = {sanityTokens}
-          setAction={setAction}
-          walletAddress={walletAddress}
-          thirdWebTokens={thirdWebTokens}
-        />
-      );
+  const renderLogic = (option) => {
+    switch (option) {
+      case "send":
+        return (
+          <Transfer
+            selectedToken={selectedToken}
+            sanityTokens={sanityTokens}
+            setAction={setAction}
+            walletAddress={walletAddress}
+            thirdWebTokens={thirdWebTokens}
+          />
+        );
+      case "receive":
+        return (
+          <Receive
+            setAction={setAction}
+            walletAddress={walletAddress}
+            selectedToken={selectedToken}
+          />
+        );
+      case "transferring":
+        return (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "1.5rem",
+            }}
+          >
+            <Loader />
+          </div>
+        );
+      case "transferred":
+        return (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "2rem",
+              fontWeight: "600",
+              color: "#27ad75",
+            }}
+          >
+            Transfer complete
+          </div>
+        );
+      case "select":
+        return (
+          <CoinSelector
+            setAction={setAction}
+            selectedToken={selectedToken}
+            setSelectedToken={setSelectedToken}
+            sanityTokens={sanityTokens}
+            thirdWebTokens={thirdWebTokens}
+            walletAddress={walletAddress}
+          />
+        );
+      default:
+        break;
     }
   };
 
@@ -43,7 +101,7 @@ const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
           <p>Receive</p>
         </Option>
       </Selector>
-      <ModalMain>{renderLogic()}</ModalMain>
+      <ModalMain>{renderLogic(action)}</ModalMain>
     </Wrapper>
   );
 };
