@@ -4,11 +4,12 @@ import imageUrlBuilder from "@sanity/image-url";
 import { client } from "../../lib/sanity";
 import { BiCopy } from "react-icons/bi";
 import { FaCheck } from "react-icons/fa";
+import { useWeb3 } from "@3rdweb/hooks";
 
-const Receive = ({ walletAddress, setAction, selectedToken }) => {
+const Receive = ({ setAction, selectedToken }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [copied, setCopied] = useState(false);
-
+  const {address} = useWeb3();
   useEffect(() => {
     const url = imageUrlBuilder(client).image(selectedToken.logo).url();
     setImageUrl(url);
@@ -17,7 +18,7 @@ const Receive = ({ walletAddress, setAction, selectedToken }) => {
     <Wrapper>
       <QRContainer>
         <img
-          src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${walletAddress}`}
+          src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${address}`}
           alt="qr code"
         />
       </QRContainer>

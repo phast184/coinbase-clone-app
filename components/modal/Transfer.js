@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { FaWallet } from "react-icons/fa";
 import imageUrlBuilder from "@sanity/image-url";
 import { client } from "../../lib/sanity";
+import { useWeb3 } from "@3rdweb/hooks";
 
 const Transfer = ({
   selectedToken,
-  walletAddress,
   thirdWebTokens,
   setAction,
 }) => {
@@ -15,6 +15,7 @@ const Transfer = ({
   const [imageUrl, setImageUrl] = useState(null);
   const [activeThirdWebToken, setActiveThirdWebToken] = useState();
   const [tokenBalance, setTokenBalance] = useState(0);
+  const {address} = useWeb3();
 
   useEffect(() => {
     const activeToken = thirdWebTokens.find(
@@ -22,8 +23,10 @@ const Transfer = ({
     );
     setActiveThirdWebToken(activeToken);
     const getBalanceActiveToken = async () => {
-      const balance = await activeToken.balanceOf(walletAddress);
-      setTokenBalance(balance.displayValue);
+      if (address) {
+        const balance = await activeToken.balanceOf(address);
+        setTokenBalance(balance.displayValue);
+      }
     };
     getBalanceActiveToken();
   }, [thirdWebTokens, selectedToken, activeThirdWebToken]);
@@ -79,7 +82,7 @@ const Transfer = ({
         </Row>
         <Row>
           <FieldName>Pay with</FieldName>
-          <CoinSelectList onClick={() => setAction('select')}>
+          <CoinSelectList onClick={() => setAction("select")}>
             <Icon>
               <img src={imageUrl} />
             </Icon>

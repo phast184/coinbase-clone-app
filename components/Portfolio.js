@@ -4,9 +4,11 @@ import {BsThreeDotsVertical} from 'react-icons/bs'
 import {coins} from '../static/coins'
 import Coin from './Coin'
 import BalanceChart from './BalanceChart'
+import { useWeb3 } from '@3rdweb/hooks'
 
-const Portfolio = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
+const Portfolio = ({sanityTokens, thirdWebTokens }) => {
   const [totalBalance, setTotalBalance] = useState(0);
+  const {address} = useWeb3()
   /** Contract address and their price */
   const tokenToUSD = {};
   for (const token of sanityTokens) {
@@ -15,9 +17,11 @@ const Portfolio = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
 
   const calculateTotalBalance = async () => {
     let total = 0;
-    for (const token of thirdWebTokens) {
-      const balance = await token.balanceOf(walletAddress);
-      total += Number(balance.displayValue) * tokenToUSD[token.address];
+    if (address) {
+      for (const token of thirdWebTokens) {
+        const balance = await token.balanceOf(address);
+        total += Number(balance.displayValue) * tokenToUSD[token.address];
+      }
     }
     setTotalBalance(total);
   }

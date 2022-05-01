@@ -39,12 +39,10 @@ const Dashboard = ({ address }) => {
       <Sidebar />
       <MainContainter>
         <Header
-          walletAddress={address}
           sanityTokens={sanityTokens}
           thirdWebTokens={thirdWebTokens}
         />
         <Main
-          walletAddress={address}
           sanityTokens={sanityTokens}
           thirdWebTokens={thirdWebTokens}
         />

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import {BsThreeDotsVertical} from 'react-icons/bs'
 import Image from 'next/image'
+import { useWeb3 } from '@3rdweb/hooks'
 
 const Coin = ({coin}) => {
   return (

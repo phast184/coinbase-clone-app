@@ -1,3 +1,4 @@
+import { useWeb3 } from "@3rdweb/hooks";
 import { useState } from "react";
 import styled from "styled-components";
 import CoinItem from "./CoinItem";
@@ -8,9 +9,9 @@ const CoinSelector = ({
   setSelectedToken,
   sanityTokens,
   thirdWebTokens,
-  walletAddress,
 }) => {
-  const sender = useState(walletAddress);
+  const {address} = useWeb3();
+  const sender = useState(address);
   return (
     <Wrapper>
       <Title>Select Asset</Title>

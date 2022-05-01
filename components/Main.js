@@ -1,12 +1,13 @@
+import { useWeb3 } from "@3rdweb/hooks";
 import React from "react";
 import styled from "styled-components";
 import Portfolio from "./Portfolio";
 import Promo from "./Promo";
-const Main = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
+const Main = ({sanityTokens, thirdWebTokens }) => {
+  const {address} = useWeb3();
   return (
     <Wrapper>
       <Portfolio
-        walletAddress={walletAddress}
         sanityTokens={sanityTokens}
         thirdWebTokens={thirdWebTokens}
       />

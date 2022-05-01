@@ -4,10 +4,12 @@ import Transfer from "./Transfer";
 import CoinSelector from "./CoinSelector";
 import Loader from "./Loader";
 import Receive from "./Receive";
+import { useWeb3 } from "@3rdweb/hooks";
 
-const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
+const TransferModal = ({ sanityTokens, thirdWebTokens }) => {
   const [action, setAction] = useState("send");
   const [selectedToken, setSelectedToken] = useState(sanityTokens[0]);
+  const {address} = useWeb3();
 
   const selectedStyle = {
     color: "#3773f5",
@@ -25,7 +27,6 @@ const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
             selectedToken={selectedToken}
             sanityTokens={sanityTokens}
             setAction={setAction}
-            walletAddress={walletAddress}
             thirdWebTokens={thirdWebTokens}
           />
         );
@@ -33,7 +34,6 @@ const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
         return (
           <Receive
             setAction={setAction}
-            walletAddress={walletAddress}
             selectedToken={selectedToken}
           />
         );
@@ -77,7 +77,6 @@ const TransferModal = ({ sanityTokens, thirdWebTokens, walletAddress }) => {
             setSelectedToken={setSelectedToken}
             sanityTokens={sanityTokens}
             thirdWebTokens={thirdWebTokens}
-            walletAddress={walletAddress}
           />
         );
       default:

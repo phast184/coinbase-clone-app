@@ -8,9 +8,9 @@ import Link from "next/link";
 
 Modal.setAppElement("#__next");
 
-const Header = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
+const Header = ({ sanityTokens, thirdWebTokens }) => {
   const router = useRouter();
-
+  const { address, connectWallet } = useWeb3();
   const customStyles = {
     content: {
       top: "50%",
@@ -30,23 +30,29 @@ const Header = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
   return (
     <Wrapper>
       <Title>Asset</Title>
-      <ButtonsContainer>
-        {walletAddress && (
+      {address ? (
+        <ButtonsContainer>
           <WalletLink>
             <WalletLinkTitle>Wallet Connected</WalletLinkTitle>
             <WalletAddress>
-              {walletAddress.slice(0, 7)}...{walletAddress.slice(35)}
+              {address.slice(0, 7)}...{address.slice(35)}
             </WalletAddress>
           </WalletLink>
-        )}
+          <Button style={{ backgroundColor: "#3773f5", color: "#000" }}>
+            Buy / Sell
+          </Button>
+          <Link href={"/?transfer=1"}>
+            <Button>Send / Receive</Button>
+          </Link>
+        </ButtonsContainer>
+      ) : (
+        <WalletConnect>
+          <ConnectButton onClick={() => connectWallet("injected")}>
+            Connect wallet
+          </ConnectButton>
+        </WalletConnect>
+      )}
 
-        <Button style={{ backgroundColor: "#3773f5", color: "#000" }}>
-          Buy / Sell
-        </Button>
-        <Link href={"/?transfer=1"}>
-          <Button>Send / Receive</Button>
-        </Link>
-      </ButtonsContainer>
       <Modal
         isOpen={!!router.query.transfer}
         onRequestClose={() => router.push("/")}
@@ -55,7 +61,6 @@ const Header = ({ walletAddress, sanityTokens, thirdWebTokens }) => {
         <TransferModal
           sanityTokens={sanityTokens}
           thirdWebTokens={thirdWebTokens}
-          walletAddress={walletAddress}
         />
       </Modal>
     </Wrapper>
@@ -73,6 +78,26 @@ const Title = styled.div`
   font-size: 2rem;
   font-weight: 600;
   flex: 1;
+`;
+
+const WalletConnect = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ConnectButton = styled.div`
+  border: 1px solid #282b2f;
+  padding: 0.8rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  border-radius: 0.4rem;
+  background-color: #3773f5;
+  color: #000;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ButtonsContainer = styled.div`
